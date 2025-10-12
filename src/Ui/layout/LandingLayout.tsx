@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Hero from "@/Ui/components/views/Hero";
-import ContactModal from "@/Ui/components/views/ContactModal";
+import Hero from "@/Ui/views/Hero";
+import ContactModal from "@/Ui/views/ContactModal";
 
 export default function LandingLayout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
