@@ -5,6 +5,7 @@ import Button from "@/Ui/components/Button";
 import { ArrowUpRight } from "lucide-react";
 import AnimatedBackground from "@/Ui/components/AnimatedBackground";
 import ClientCarousel from "@/Ui/components/ClientCarousel";
+import { useNavigate } from "react-router-dom";
 
 interface HeroProps {
   onOpenModal: () => void;
@@ -12,6 +13,7 @@ interface HeroProps {
 
 
 export default function Hero({ onOpenModal }: HeroProps) {
+  const navigate = useNavigate();
 
   return (
     <section className="relative min-h-screen flex flex-col overflow-hidden bg-black">
@@ -36,6 +38,7 @@ export default function Hero({ onOpenModal }: HeroProps) {
             <Button
               variant="ghost"
               className="flex items-center gap-2 text-white hover:text-gray-300 cursor-pointer"
+              onClick={() => navigate("/about")}
             >
               About Us <ArrowUpRight className="h-4 w-4" />
             </Button>

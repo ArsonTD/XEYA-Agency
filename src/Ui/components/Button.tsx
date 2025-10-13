@@ -12,6 +12,7 @@ export default function Button({ variant = "default", className, ...props }: But
     default: "bg-white text-black hover:bg-gray-200",
     ghost: "bg-transparent text-white hover:bg-white/10",
     outline: "border border-white/20 text-white hover:bg-white/5",
+
   }
 
   return (
