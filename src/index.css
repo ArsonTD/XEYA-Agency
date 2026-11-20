@@ -1,1 +1,390 @@
-@import 'tailwindcss'
+@import 'tailwindcss';
+
+/*
+ * El isotipo de XEYA como carácter (U+E000), para usarlo dentro de un texto: por ejemplo,
+ * como separador del titular en bucle de Proyectos. Lleva sus propios colores (línea blanca,
+ * esquirlas azul láser). Se genera con un script; ver el comentario en Portfolio.tsx.
+ */
+@font-face {
+	font-family: 'XEYA Mark';
+	src: url('/fonts/xeya-mark.ttf') format('truetype');
+	font-display: block;
+	unicode-range: U+E000;
+}
+
+/*
+ * Sistema visual XEYA
+ * Fondo tinta y luz de láser, como el Hero: filos luminosos, resplandores
+ * hechos con sombras y desenfoque, tipografía monumental extendida y
+ * etiquetas monoespaciadas.
+ */
+@theme {
+	--color-ink: #02080e;
+	--color-panel: #06121c;
+	--color-navy: #04263f;
+	--color-blue: #0563a8;
+	--color-sky: #6ba3d0;
+	/* Luz del láser del Hero */
+	--color-beam: #1f7fd6;
+	--color-laser: #46c8ff;
+	--color-glint: #bfeaff;
+	--color-mist: #cfe3f3;
+	--color-paper: #edf1f4;
+	--color-card: #221f1f;
+
+	--font-display: 'Archivo', 'XEYA Mark', 'Helvetica Neue', Arial, sans-serif;
+	--font-sans: 'Urbanist', ui-sans-serif, system-ui, sans-serif;
+	--font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+	--ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+	--animate-blink: blink 1.6s steps(2, jump-none) infinite;
+	--animate-sway: sway 5.5s ease-in-out infinite alternate;
+
+	@keyframes sway {
+		from {
+			rotate: -2.4deg;
+		}
+		to {
+			rotate: 2.4deg;
+		}
+	}
+
+	@keyframes blink {
+		50% {
+			opacity: 0.2;
+		}
+	}
+}
+
+/* Base y componentes van en capas para que las utilidades de Tailwind puedan sobrescribirlos. */
+@layer base {
+html {
+	background: var(--color-ink);
+}
+
+body {
+	font-family: var(--font-sans);
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+::selection {
+	background: var(--color-sky);
+	color: var(--color-ink);
+}
+
+:focus-visible {
+	outline: 2px solid var(--color-sky);
+	outline-offset: 4px;
+}
+}
+
+@layer components {
+/* Titulares: Archivo en su ancho máximo */
+.font-display {
+	font-family: var(--font-display);
+	font-stretch: 125%;
+}
+
+/* Etiqueta técnica monoespaciada */
+.label {
+	font-family: var(--font-mono);
+	font-size: 11px;
+	line-height: 1.4;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+}
+
+/* Filo de luz: una línea de 1px que brilla como el rayo */
+.laser-line {
+	height: 1px;
+	background: var(--color-glint);
+	box-shadow:
+		0 0 6px var(--color-laser),
+		0 0 22px 1px rgba(31, 127, 214, 0.9);
+}
+
+/* Versión tenue, para separar sin competir */
+.laser-line-soft {
+	height: 1px;
+	background: rgba(127, 212, 255, 0.32);
+	box-shadow: 0 0 16px rgba(31, 127, 214, 0.55);
+}
+
+/* Texto encendido */
+.glow-text {
+	color: var(--color-laser);
+	text-shadow:
+		0 0 18px rgba(70, 200, 255, 0.55),
+		0 0 60px rgba(31, 127, 214, 0.6);
+}
+
+/* Texto encendido con halo corto, para titulares que entran desde una máscara */
+.glow-soft {
+	color: var(--color-laser);
+	text-shadow: 0 0 16px rgba(70, 200, 255, 0.5);
+}
+
+/* Resplandor de fondo: un disco de color muy desenfocado */
+.aura {
+	position: absolute;
+	border-radius: 9999px;
+	background: var(--color-beam);
+	filter: blur(130px);
+	opacity: 0.26;
+	pointer-events: none;
+}
+
+/*
+ * En teléfonos y tabletas, un desenfoque de 130 px sobre un disco de medio millar de píxeles
+ * es de lo más caro que puede pedirse al navegador. Ahí el mismo resplandor se pinta con un
+ * degradado radial, que no cuesta nada.
+ */
+@media (hover: none) and (pointer: coarse) {
+	.aura {
+		background: radial-gradient(
+			closest-side,
+			rgba(31, 127, 214, 0.3) 0%,
+			rgba(31, 127, 214, 0.17) 45%,
+			rgba(31, 127, 214, 0.05) 78%,
+			transparent 100%
+		);
+		filter: none;
+		opacity: 1;
+		scale: 1.5;
+	}
+}
+
+/* Panel oscuro con borde de luz */
+.panel {
+	background: rgba(6, 18, 28, 0.72);
+	border: 1px solid rgba(127, 212, 255, 0.14);
+}
+
+/* Esquinas cortadas en diagonal, como las esquirlas del isotipo */
+.chamfer {
+	--c: 22px;
+	clip-path: polygon(
+		0 0,
+		calc(100% - var(--c)) 0,
+		100% var(--c),
+		100% 100%,
+		var(--c) 100%,
+		0 calc(100% - var(--c))
+	);
+}
+
+.chamfer-sm {
+	--c: 10px;
+}
+
+/* Patrón </> de la marca, como en las piezas gráficas */
+.code-pattern {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='230'%3E%3Cg fill='none' stroke='%236ba3d0' stroke-opacity='.09' stroke-width='1.5' transform='matrix(.92 .28 -.5 .86 70 -6)'%3E%3Cpath d='M60 58 22 84l38 26v-14L42 84l18-12zM138 58l38 26-38 26v-14l18-12-18-12zM108 44h14L92 124H78z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ───────── Glass (navbar) ───────── */
+.glass {
+	background: rgba(6, 18, 28, 0.6);
+	border: 1px solid rgba(255, 255, 255, 0.16);
+	backdrop-filter: blur(18px) saturate(170%);
+	-webkit-backdrop-filter: blur(18px) saturate(170%);
+	box-shadow:
+		0 12px 40px rgba(0, 0, 0, 0.35),
+		inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+/* Glass-style button utilities (vista Solutions) */
+.glass-btn {
+	background: rgba(247, 247, 247, 0.85);
+	border: 1px solid rgba(0,0,0,0.08);
+	border-radius: 9999px;
+	box-shadow: 0 10px 30px rgba(2,6,23,0.08), inset 0 2px 0 rgba(255,255,255,0.6), inset 0 -6px 12px rgba(0,0,0,0.04);
+	backdrop-filter: blur(8px);
+}
+
+.glass-btn-plain {
+	background: rgba(247,247,247,0.9);
+	border: 1px solid rgba(0,0,0,0.06);
+	border-radius: 9999px;
+	box-shadow: 0 6px 18px rgba(2,6,23,0.06), inset 0 1px 0 rgba(255,255,255,0.7);
+	backdrop-filter: blur(6px);
+}
+
+.glass-text-deep {
+	text-shadow: 0 1px 0 rgba(255,255,255,0.6), 0 6px 18px rgba(2,6,23,0.04);
+}
+
+/* ───────── Misión / Visión / Valores: tipografía isométrica de luz ───────── */
+.mvv {
+	--mvv-strong: var(--color-beam);
+	--mvv-soft: #7fd4ff;
+	--mvv-glow: var(--color-beam);
+	--mvv-text: #cfe3f3;
+	--mvv-title: #ffffff;
+	--mvv-rule: rgba(127, 212, 255, 0.28);
+	background-color: var(--color-ink);
+	color: var(--mvv-text);
+}
+
+.iso {
+	--a: 13deg;
+	--word: clamp(3rem, 13.5vw, 11rem);
+	transform: skewY(var(--a));
+}
+
+.iso[data-dir='up'] {
+	transform: skewY(calc(var(--a) * -1));
+}
+
+@media (min-width: 768px) {
+	.iso {
+		--a: 22deg;
+	}
+}
+
+.iso-word {
+	position: relative;
+	z-index: 1;
+	width: max-content;
+	font-family: var(--font-display);
+	font-stretch: 112%;
+	font-weight: 900;
+	font-size: var(--word);
+	line-height: 0.74;
+	letter-spacing: -0.02em;
+	text-transform: uppercase;
+	color: var(--mvv-strong);
+}
+
+.iso-word::before,
+.iso-word::after {
+	content: attr(data-word);
+	position: absolute;
+	left: 0;
+	pointer-events: none;
+}
+
+/* Cara superior: la palabra "acostada" sobre el plano */
+.iso-word::before {
+	bottom: 100%;
+	transform-origin: bottom left;
+	transform: skewX(-56deg) scaleY(0.6);
+	color: var(--mvv-soft);
+}
+
+/* Reflejo de luz proyectado bajo la palabra */
+.iso-word::after {
+	top: 100%;
+	z-index: -1;
+	transform-origin: top left;
+	transform: skewX(56deg) scaleY(0.6);
+	color: var(--mvv-glow);
+	opacity: 0.55;
+	filter: blur(calc(var(--word) * 0.07));
+}
+
+.iso[data-dir='up'] .iso-word::before {
+	transform-origin: bottom right;
+	transform: skewX(56deg) scaleY(0.6);
+}
+
+.iso[data-dir='up'] .iso-word::after {
+	transform-origin: top right;
+	transform: skewX(-56deg) scaleY(0.6);
+}
+
+/* ───────── Accesibilidad: saltar al contenido ───────── */
+.skip-link {
+	position: fixed;
+	top: 12px;
+	left: 12px;
+	z-index: 100;
+	padding: 12px 18px;
+	background: #fff;
+	color: var(--color-ink);
+	font-family: var(--font-mono);
+	font-size: 12px;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	transform: translateY(-200%);
+}
+.skip-link:focus {
+	transform: translateY(0);
+}
+
+/* ───────── Páginas legales: texto corrido, cómodo de leer ───────── */
+.legal h2 {
+	margin-top: 3.25rem;
+	font-family: var(--font-display);
+	font-stretch: 125%;
+	font-size: 1.375rem;
+	font-weight: 800;
+	line-height: 1.15;
+	letter-spacing: -0.01em;
+	text-transform: uppercase;
+	color: #fff;
+}
+.legal p,
+.legal li {
+	font-size: 1.0625rem;
+	line-height: 1.75;
+	color: var(--color-mist);
+}
+.legal p {
+	margin-top: 1rem;
+}
+.legal ul {
+	margin-top: 1rem;
+	padding-left: 1.4rem;
+	list-style: disc;
+}
+.legal li {
+	margin-top: 0.5rem;
+}
+.legal strong {
+	font-weight: 700;
+	color: #fff;
+}
+.legal a {
+	color: #fff;
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+.legal a:hover {
+	color: var(--color-laser);
+}
+.legal code {
+	padding: 0.1em 0.4em;
+	background: rgba(127, 212, 255, 0.12);
+	font-family: var(--font-mono);
+	font-size: 0.9em;
+	color: #fff;
+}
+
+/* ───────── Tarjeta de presentación ───────── */
+.card-face {
+	position: absolute;
+	inset: 0;
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+	border-radius: inherit;
+	overflow: hidden;
+	background: var(--color-card);
+}
+
+.no-scrollbar {
+	scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.animate-blink,
+	.animate-sway {
+		animation: none;
+	}
+}
