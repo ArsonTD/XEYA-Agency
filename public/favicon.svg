@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="708 312 660 660">
+  <!-- Solo la X del logotipo de XEYA, sin fondo y con sus colores originales: línea negra y
+       esquirlas azules. Cuando la pestaña del navegador es oscura, la línea pasa a blanco y
+       el azul se aclara, para que no desaparezca. Los trazos llevan un borde extra para que
+       se lea a 16 px. -->
+  <style>
+    .line { fill: #000000; stroke: #000000; }
+    .shard { fill: #0563a8; stroke: #0563a8; }
+    @media (prefers-color-scheme: dark) {
+      .line { fill: #ffffff; stroke: #ffffff; }
+      .shard { fill: #46c8ff; stroke: #46c8ff; }
+    }
+  </style>
+  <g stroke-linejoin="round">
+    <path class="line" d="M760 342 1042 634 1044 760 1037 942 1031 760 1032 640Z" stroke-width="30"/>
+    <g class="shard" stroke-width="16">
+      <path d="M1132 342H1315L1085 596 1257 363Z"/>
+      <path d="M762 942 992 686 820 921 945 942Z"/>
+      <path d="M1314 942 1083 688 1255 921 1130 942Z"/>
+    </g>
+  </g>
+</svg>
