@@ -22,3 +22,14 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Next.js
+.next
+out
+release
+release.tgz
+next-env.d.ts
+*.tsbuildinfo
+
+# Copia de la version Vite, previa a la migracion a Next.js
+respaldo-vite-*.zip
